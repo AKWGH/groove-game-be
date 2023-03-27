@@ -27,6 +27,14 @@ app.post("/api/user", registerUser);
 app.get("/api/user", loginUser);
 app.get("/api/songs/:genre", getSongs);
 
+app.use((err, req, res, next) => {
+  if (err.status === 404) {
+    res.status(404).send(err.msg);
+  } else {
+    next(err);
+  }
+});
+
 const port = 9090;
 
 // establishes connection with the database otherwise server fails to run
