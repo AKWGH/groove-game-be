@@ -20,18 +20,22 @@ const registerUser = (req, res) => {
   });
 };
 
+
 const loginUser = (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body; //Checks if user and password both exist
   if (!username || !password) {
     res.status(401).send({ msg: "Please fill out all fields." });
   }
+  //Queries the database for username
   User.findOne({ username }).then((data) => {
     if (data) {
       const hash = data.password;
       bcrypt.compare(password, hash, function (err, result) {
+        //Compares the hashed password and password
+        //Andy - Try to send back correct data - Username and name
         if (result) {
           res.status(200).send("correct login");
-        } else {
+        } else { //
           res.status(401).send("incorrect username or pasword");
         }
       });
