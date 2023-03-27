@@ -1,12 +1,12 @@
 // packages
-const express = require('express');
-const connectDB = require('./db/connect');
+const express = require("express");
+const connectDB = require("./db/connect");
 
 // controllers
-const { registerUser } = require('./controllers/userController');
+const { registerUser, loginUser } = require("./controllers/userController");
 
 // allows access to env file
-require('dotenv').config();
+require("dotenv").config();
 
 // initialises express server
 const app = express();
@@ -15,7 +15,8 @@ const app = express();
 app.use(express.json());
 
 // routes
-app.post('/api/user', registerUser);
+app.post("/api/user", registerUser);
+app.get("/api/user", loginUser);
 
 const port = 9090;
 
