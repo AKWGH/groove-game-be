@@ -1,9 +1,12 @@
 // packages
 const express = require("express");
 const connectDB = require("./db/connect");
+const axios = require("axios");
 
 // controllers
 const { registerUser, loginUser } = require("./controllers/userController");
+const { getSongs } = require("./controllers/songsController");
+const { tokenRefresh } = require("./api");
 
 // allows access to env file
 require("dotenv").config();
@@ -14,9 +17,15 @@ const app = express();
 // parses data to json
 app.use(express.json());
 
+// spotify token generation
+
+tokenRefresh(); // this function is invoked on server startup
+setInterval(tokenRefresh, 3.54e6); // the function invokes itself once every 59 minutes as the token expires automatically after an hour
+
 // routes
 app.post("/api/user", registerUser);
 app.get("/api/user", loginUser);
+app.get("/api/songs/:genre", getSongs);
 
 const port = 9090;
 
@@ -33,3 +42,5 @@ const start = async () => {
 };
 
 start();
+
+module.exports = { app, start };
