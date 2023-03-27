@@ -40,7 +40,7 @@ const port = 9090;
 // establishes connection with the database otherwise server fails to run
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI);
+    await connectDB();
     app.listen(port, () => {
       console.log(`server is listening on port ${port}...`);
     });
