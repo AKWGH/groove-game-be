@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 // model for posting users to the database
 const UserSchema = new mongoose.Schema({

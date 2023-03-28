@@ -22,4 +22,4 @@ const getGame = (req, res, next) => {
     });
 };
 
-module.exports = { postGame };
+module.exports = { postGame, getGame };

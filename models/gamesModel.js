@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 // model for posting games to the database
 const GamesSchema = new mongoose.Schema({
