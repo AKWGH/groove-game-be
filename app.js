@@ -27,6 +27,8 @@ app.post("/api/user", registerUser);
 app.get("/api/user", loginUser);
 app.get("/api/songs/:genre", getSongs);
 
+// error handling middleware
+
 app.use((err, req, res, next) => {
   if (err.status === 404) {
     res.status(404).send(err.msg);
