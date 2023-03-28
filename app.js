@@ -3,6 +3,14 @@ const express = require("express");
 const connectDB = require("./db/connect");
 const axios = require("axios");
 
+// error handling
+const {
+  handleCustomErrors,
+  handleServerError,
+  invalidPathError,
+  apiErrorHandler,
+} = require("./controllers/errorController");
+
 // controllers
 const { registerUser, loginUser } = require("./controllers/userController");
 const { getSongs } = require("./controllers/songsController");
@@ -30,13 +38,15 @@ app.get("/api/songs/:genre", getSongs);
 app.get("api/games", getGame);
 app.post("/api/games", postGame);
 
-app.use((err, req, res, next) => {
-  if (err.status === 404) {
-    res.status(404).send(err.msg);
-  } else {
-    next(err);
-  }
-});
+// error handling
+// handles invalid paths
+app.use(invalidPathError);
+// api error handler
+app.use(apiErrorHandler);
+// handles custom errors
+app.use(handleCustomErrors);
+// handles server errors
+app.use(handleServerError);
 
 const port = 9090;
 
