@@ -1,15 +1,7 @@
 const handleCustomErrors = (err, req, res, next) => {
-  if (err === "user validation failed") {
-    res.status(400).send({ msg: err });
+  if (err._message === "user validation failed") {
+    res.status(400).send({ msg: err._message });
   } else next(err);
-};
-
-const invalidPathError = (req, res, next) => {
-  res.status(404).send({ msg: "Sorry, path not found" });
-};
-
-const handleServerError = (err, req, res, next) => {
-  res.status(500).send({ msg: "Server Error" });
 };
 
 const apiErrorHandler = (err, req, res, next) => {
@@ -20,9 +12,25 @@ const apiErrorHandler = (err, req, res, next) => {
   }
 };
 
+const duplicateUserError = (err, req, res, next) => {
+  if (err.code === 11000) {
+    res.status(401).send({ msg: "user already exists" });
+  } else {
+    next(err);
+  }
+};
+
+const handleServerError = (err, req, res, next) => {
+  if (err.status === 500) {
+    res.status(500).send({ msg: "Server Error" });
+  } else {
+    next(err);
+  }
+};
+
 module.exports = {
   handleCustomErrors,
   handleServerError,
-  invalidPathError,
   apiErrorHandler,
+  duplicateUserError,
 };

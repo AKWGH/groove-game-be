@@ -19,8 +19,7 @@ const registerUser = (req, res, next) => {
           res.status(201).send({ msg: "user created" });
         })
         .catch((err) => {
-          console.log(err);
-          next(err._message);
+          next(err);
         });
     });
   });
@@ -41,7 +40,6 @@ const loginUser = (req, res) => {
         if (result) {
           res.status(200).send("correct login");
         } else {
-          //
           res.status(401).send("incorrect username or pasword");
         }
       });
