@@ -16,11 +16,11 @@ describe('app endpoint tests', () => {
   describe('POST /api/user', () => {
     it('should respond with a status 201 created and create a new user', () => {
       return request(app)
-        .post('/api/user')
+        .post("/api/user")
         .expect(201)
         .send({ username: 'andy', name: 'andy', password: 'password' })
         .then(({ body }) => {
-          expect(body.msg).toBe('user created');
+          expect(body.msg).toBe("user created");
         });
     });
     it('should respond with a status code 400 user validation failed', () => {

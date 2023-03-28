@@ -3,6 +3,7 @@ const artistSeeds = require("../db/artistSeeds");
 const axios = require("axios");
 
 const fetchSongs = (genre) => {
+  const songLimit = 20;
   // will fetch songs from the spotify API
   const artistNames = Object.keys(artistSeeds); // creating an array of genres hardcoded in artistSeeds.js
   if (!artistNames.includes(genre)) {
@@ -13,7 +14,7 @@ const fetchSongs = (genre) => {
   } else {
     return axios // a get request to the spotify API
       .get(
-        `https://api.spotify.com/v1/recommendations?seed_artists=${artistSeeds[genre].artist_ids}&seed_genres=${artistSeeds[genre].genre_names}&seed_tracks=${artistSeeds[genre].track_ids}&limit=20`,
+        `https://api.spotify.com/v1/recommendations?seed_artists=${artistSeeds[genre].artist_ids}&seed_genres=${artistSeeds[genre].genre_names}&seed_tracks=${artistSeeds[genre].track_ids}&limit=${songLimit}`,
         {
           headers: {
             "Content-Type": "application / json",
