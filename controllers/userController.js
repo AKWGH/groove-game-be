@@ -4,17 +4,23 @@ const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 
 // controller for posting users to the database
-const registerUser = (req, res) => {
+const registerUser = (req, res, next) => {
   const { name, username, password } = req.body; // capturing the request body
+
   const saltRounds = 10;
   bcrypt.genSalt(saltRounds, function (err, salt) {
     // adding random strings to the password
     bcrypt.hash(password, salt, function (err, hashedPassword) {
       // shuffling string characters
       User.create({ name, username, password: hashedPassword })
-        .then(() => res.status(201).send({ msg: 'user created' }))
+        .then(() => {
+          if (!name || !username || !password) {
+            Promise.reject('Sorry, please fill out all fields');
+          }
+          res.status(201).send({ msg: 'user created' });
+        })
         .catch((err) => {
-          res.status(401).json({ msg: 'Sorry, please fill out all fields' });
+          next(err._message);
         });
     });
   });
