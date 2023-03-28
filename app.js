@@ -9,6 +9,7 @@ const {
   handleServerError,
   invalidPathError,
   apiErrorHandler,
+  duplicateUserError,
 } = require("./controllers/errorController");
 
 // controllers
@@ -36,12 +37,13 @@ app.get("/api/user", loginUser);
 app.get("/api/songs/:genre", getSongs);
 
 // error handling
-// handles invalid paths
-app.use(invalidPathError);
-// api error handler
-app.use(apiErrorHandler);
+
 // handles custom errors
 app.use(handleCustomErrors);
+// api error handler
+app.use(apiErrorHandler);
+// handles duplicate users
+app.use(duplicateUserError);
 // handles server errors
 app.use(handleServerError);
 
