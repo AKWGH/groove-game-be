@@ -15,6 +15,7 @@ const {
 // controllers
 const { registerUser, loginUser } = require("./controllers/userController");
 const { getSongs } = require("./controllers/songsController");
+const { postGame, getGame } = require("./controllers/gamesController");
 const { tokenRefresh } = require("./api");
 
 // allows access to env file
@@ -35,6 +36,8 @@ setInterval(tokenRefresh, 3.54e6); // the function invokes itself once every 59 
 app.post("/api/user", registerUser);
 app.get("/api/user", loginUser);
 app.get("/api/songs/:genre", getSongs);
+app.post("/api/games", postGame);
+app.get("/api/games", getGame);
 
 // error handling
 

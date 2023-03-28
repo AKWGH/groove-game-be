@@ -38,7 +38,11 @@ const loginUser = (req, res) => {
         //Compares the hashed password and password
         //Andy - Try to send back correct data - Username and name
         if (result) {
-          res.status(200).send("correct login");
+          User.findOne({ username }).then((data) => {
+            const { name, username, _id } = data;
+            res.status(200).send({ name, username, _id });
+          });
+          // res.status(200).send("correct login");
         } else {
           res.status(401).send("incorrect username or pasword");
         }
