@@ -48,7 +48,7 @@ app.use(handleCustomErrors);
 // handles server errors
 app.use(handleServerError);
 
-const port = 9090;
+const port = 5500;
 
 // establishes connection with the database otherwise server fails to run
 const start = async () => {

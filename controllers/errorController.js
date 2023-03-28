@@ -1,15 +1,15 @@
 const handleCustomErrors = (err, req, res, next) => {
-  if (err === 'user validation failed') {
+  if (err === "user validation failed") {
     res.status(400).send({ msg: err });
   } else next(err);
 };
 
 const invalidPathError = (req, res, next) => {
-  res.status(404).send({ msg: 'Sorry, path not found' });
+  res.status(404).send({ msg: "Sorry, path not found" });
 };
 
 const handleServerError = (err, req, res, next) => {
-  res.status(500).send({ msg: 'Server Error' });
+  res.status(500).send({ msg: "Server Error" });
 };
 
 const apiErrorHandler = (err, req, res, next) => {
