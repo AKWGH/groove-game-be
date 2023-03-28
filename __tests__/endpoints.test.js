@@ -1,5 +1,8 @@
 const request = require("supertest");
 const { app } = require("../app");
+const connection = require("../db/connect");
+
+afterAll(() => connection.end());
 
 describe("app endpoint tests", () => {
   describe("testing invalid paths handler", () => {
@@ -18,7 +21,7 @@ describe("app endpoint tests", () => {
       return request(app)
         .post("/api/user")
         .expect(201)
-        .send({ username: "andy", name: "andy", password: "password" })
+        .send({ username: "wdasdwawda", name: "andy", password: "password" })
         .then(({ body }) => {
           expect(body.msg).toBe("user created");
         });
@@ -47,5 +50,23 @@ describe("app endpoint tests", () => {
     //         });
     //     });
     // });
+  });
+  describe("POST /api/games", () => {
+    it("Should respond with a status code of 201 and post a game to the database", () => {
+      return request(app)
+        .post("/api/games")
+        .expect(201)
+        .send({
+          game: {
+            user: "testuser",
+            songs: {
+              track_id: "1240us0rasoierj12z",
+            },
+          },
+        })
+        .then((res) => {
+          expect(res.body.msg).toBe("Game created");
+        });
+    });
   });
 });
