@@ -19,7 +19,7 @@ const {
   deleteUser,
   updateUser,
 } = require("./controllers/userController");
-const { getSongs } = require("./controllers/songsController");
+const { getSongs, getGenres } = require("./controllers/songsController");
 const { postGame, getGame } = require("./controllers/gamesController");
 const { tokenRefresh } = require("./api");
 
@@ -45,6 +45,7 @@ app.post("/api/submit-games", postGame);
 app.post("/api/get-games", getGame);
 app.delete("/api/user", deleteUser);
 app.patch("/api/user", updateUser);
+app.get("/api/genres", getGenres);
 // error handling
 
 // handles custom errors

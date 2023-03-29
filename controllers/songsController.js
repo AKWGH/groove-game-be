@@ -11,4 +11,11 @@ const getSongs = (req, res, next) => {
     });
 };
 
-module.exports = { getSongs };
+const getGenres = (req, res, next) => {
+  const genreList = {
+    genres: ["pop", "rock", "jazz", "hip_hop", "edm", "indie"],
+  };
+  res.status(200).send(genreList);
+};
+
+module.exports = { getSongs, getGenres };
