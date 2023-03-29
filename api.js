@@ -1,9 +1,9 @@
 const axios = require("axios");
-
+require("dotenv").config();
 // client_id and client_secret for our app
 
-const client_id = "635e97b41a384a20bea1ce568b72c060";
-const client_secret = "15064f1c13ff48ce9365868f162247e5";
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
 let spotifyToken = {
   token: "", // variable to store the token we recieve back from spotify
 };
