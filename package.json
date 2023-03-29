@@ -16,5 +16,8 @@
   "scripts": {
     "prepare": "husky install",
     "test": "cross-env NODE_ENV=test jest"
+  },
+  "engines": {
+    "node": ">=14.20.1"
   }
 }
