@@ -25,7 +25,6 @@ describe("app endpoint tests", () => {
         return copy;
       }
       const randomStr = shuffle(["a", "b", "c", "d", "e", "f", "g", "h", "i"]);
-      console.log(shuffle);
       return request(app)
         .post("/api/user")
         .expect(201)

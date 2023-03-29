@@ -24,7 +24,6 @@ const tokenRefresh = () => {
     })
     .then((res) => {
       spotifyToken.token = res.data.access_token; // the spotifyToken variable is updated with the token we recieve back from spotify
-      console.log("Refreshing token... ", spotifyToken);
     });
 };
 
