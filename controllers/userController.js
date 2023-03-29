@@ -25,7 +25,7 @@ const registerUser = (req, res, next) => {
   });
 };
 
-const loginUser = (req, res) => {
+const loginUser = (req, res, next) => {
   const { username, password } = req.body; //Checks if user and password both exist
   if (!username || !password) {
     res.status(401).send({ msg: "Please fill out all fields." });
@@ -48,9 +48,27 @@ const loginUser = (req, res) => {
         }
       });
     } else {
-      res.status(401).send("incorrect username or password");
+      res.status(404).send("username not found");
     }
   });
 };
 
-module.exports = { registerUser, loginUser };
+const deleteUser = (req, res, next) => {
+  const { username } = req.body;
+  if (!username) {
+    res.status(401).send({ msg: "Please fill out all fields." });
+  } else
+    [
+      User.findOne({ username }).then((data) => {
+        if (data) {
+          User.deleteOne({ username }).then(() => {
+            res.status(200).send({ msg: "User deleted" });
+          });
+        } else {
+          res.status(404).send({ msg: "Username does not exist" });
+        }
+      }),
+    ];
+};
+
+module.exports = { registerUser, loginUser, deleteUser };
