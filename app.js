@@ -38,11 +38,11 @@ tokenRefresh(); // this function is invoked on server startup
 setInterval(tokenRefresh, 3.54e6); // the function invokes itself once every 59 minutes as the token expires automatically after an hour
 
 // routes
-app.post("/api/user", registerUser);
-app.get("/api/user", loginUser);
+app.post("/api/user-signup", registerUser);
+app.post("/api/user-login", loginUser);
 app.get("/api/songs/:genre", getSongs);
-app.post("/api/games", postGame);
-app.get("/api/games", getGame);
+app.post("/api/submit-games", postGame);
+app.post("/api/get-games", getGame);
 app.delete("/api/user", deleteUser);
 app.patch("/api/user", updateUser);
 // error handling

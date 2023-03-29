@@ -8,7 +8,7 @@ describe("app endpoint tests", () => {
     });
   });
 
-  describe("POST /api/user", () => {
+  describe("POST /api/user-signup", () => {
     it("should respond with a status 201 created and create a new user", () => {
       function shuffle(array) {
         let copy = [],
@@ -26,7 +26,7 @@ describe("app endpoint tests", () => {
       }
       const randomStr = shuffle(["a", "b", "c", "d", "e", "f", "g", "h", "i"]);
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .expect(201)
         .send({ username: `${randomStr}`, name: "andy", password: "password" })
         .then(({ body }) => {
@@ -35,7 +35,7 @@ describe("app endpoint tests", () => {
     });
     it("should respond with a status code 400 user validation failed", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .expect(400)
         .send({ name: "andy" })
         .then(({ body }) => {
@@ -44,11 +44,11 @@ describe("app endpoint tests", () => {
     });
     it("should respond 401 if user already exists", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "phil", username: "philly", password: "password" })
         .then(() => {
           return request(app)
-            .post("/api/user")
+            .post("/api/user-signup")
             .expect(401)
             .send({ name: "phil", username: "philly", password: "password" })
             .then(({ body }) => {
@@ -58,11 +58,11 @@ describe("app endpoint tests", () => {
     });
     it("should respond with a status code of 401 and a message when provided an incorrect password", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "phil", username: "philly", password: "password" })
         .then(() => {
           return request(app)
-            .post("/api/user")
+            .post("/api/user-signup")
             .expect(401)
             .send({
               name: "phil",
@@ -76,14 +76,14 @@ describe("app endpoint tests", () => {
     });
   });
 
-  describe("POST /api/games", () => {
+  describe("POST /api/games/submit-games", () => {
     it("should respond with a status code of 201 when creating a game", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "bob", username: "bob", password: "password" })
         .then(() => {
           return request(app)
-            .post("/api/games")
+            .post("/api/submit-games")
             .expect(201)
             .send({
               game: {
@@ -97,7 +97,7 @@ describe("app endpoint tests", () => {
     });
     it("should respond with a 401 when provided with an incorrect request body", () => {
       return request(app)
-        .post("/api/games")
+        .post("/api/submit-games")
         .expect(401)
         .send({
           games: {
@@ -110,7 +110,7 @@ describe("app endpoint tests", () => {
     });
     it("should respond with a 401 when provided with an incorrect request body", () => {
       return request(app)
-        .post("/api/games")
+        .post("/api/submit-games")
         .expect(401)
         .send({
           game: {
@@ -122,7 +122,7 @@ describe("app endpoint tests", () => {
     });
     it("should respond with a 404 if provided a nonexistant user property", () => {
       return request(app)
-        .post("/api/games")
+        .post("/api/submit-games")
         .expect(404)
         .send({
           game: {
@@ -135,14 +135,14 @@ describe("app endpoint tests", () => {
     });
   });
 
-  describe("GET /api/games", () => {
+  describe("POST /api/get-games", () => {
     it("should return a status code of 200 and the correct body", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "bob", username: "bob", password: "password" })
         .then(() => {
           return request(app)
-            .post("/api/games")
+            .post("/api/submit-games")
             .expect(201)
             .send({
               game: {
@@ -155,7 +155,7 @@ describe("app endpoint tests", () => {
         })
         .then(() => {
           return request(app)
-            .get("/api/games")
+            .post("/api/get-games")
             .expect(200)
             .send({ username: "bob" })
             .then((data) => {
@@ -169,7 +169,7 @@ describe("app endpoint tests", () => {
   describe("DELETE /api/user", () => {
     it("should respond with a status code of 200", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "danny", username: "danny", password: "password" })
         .then(() => {
           return request(app)
@@ -180,7 +180,7 @@ describe("app endpoint tests", () => {
     });
     it("should remove the user from the database", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "danny", username: "danny", password: "password" })
         .then(() => {
           return request(app)
@@ -190,7 +190,7 @@ describe("app endpoint tests", () => {
         })
         .then(() => {
           return request(app)
-            .get("/api/user")
+            .post("/api/user-login")
             .expect(404)
             .send({ name: "danny", username: "danny", password: "password" });
         });
@@ -206,7 +206,7 @@ describe("app endpoint tests", () => {
   describe("PATCH /api/user", () => {
     it("should return a status code of 201", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "phil", username: "philly", password: "password" })
         .then(() => {
           return request(app)
@@ -217,7 +217,7 @@ describe("app endpoint tests", () => {
     });
     it("should update the users name", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "phil", username: "philly", password: "password" })
         .then(() => {
           return request(app)
@@ -230,7 +230,7 @@ describe("app endpoint tests", () => {
             })
             .then(() => {
               return request(app)
-                .get("/api/user")
+                .post("/api/user-login")
                 .send({
                   username: "philly",
                   password: "password",
@@ -241,7 +241,7 @@ describe("app endpoint tests", () => {
     });
     it("should update the users password", () => {
       return request(app)
-        .post("/api/user")
+        .post("/api/user-signup")
         .send({ name: "phil", username: "philly", password: "password" })
         .then(() => {
           return request(app)
@@ -254,7 +254,7 @@ describe("app endpoint tests", () => {
             })
             .then(() => {
               return request(app)
-                .get("/api/user")
+                .post("/api/user-login")
                 .send({
                   username: "philly",
                   password: "wordpass",
