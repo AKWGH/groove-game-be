@@ -62,6 +62,65 @@ describe("app endpoint tests", () => {
         });
     });
   });
+
+  describe("POST /api/games", () => {
+    it("should respond with a status code of 201 when creating a game", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "bob", username: "bob", password: "password" })
+        .then(() => {
+          return request(app)
+            .post("/api/games")
+            .expect(201)
+            .send({
+              game: {
+                user: "bob",
+                songs: {
+                  track_ids: ["125155p2", "51o2j5po25j1", "451opj51po2"],
+                },
+              },
+            });
+        });
+    });
+    it("should respond with a 401 when provided with an incorrect request body", () => {
+      return request(app)
+        .post("/api/games")
+        .expect(401)
+        .send({
+          games: {
+            user: "bob",
+            songs: {
+              track_ids: ["125155p2", "51o2j5po25j1", "451opj51po2"],
+            },
+          },
+        });
+    });
+    it("should respond with a 401 when provided with an incorrect request body", () => {
+      return request(app)
+        .post("/api/games")
+        .expect(401)
+        .send({
+          game: {
+            songs: {
+              track_ids: ["125155p2", "51o2j5po25j1", "451opj51po2"],
+            },
+          },
+        });
+    });
+    it("should respond with a 404 if provided a nonexistant user property", () => {
+      return request(app)
+        .post("/api/games")
+        .expect(404)
+        .send({
+          game: {
+            user: "testbob",
+            songs: {
+              track_ids: ["125155p2", "51o2j5po25j1", "451opj51po2"],
+            },
+          },
+        });
+    });
+  });
 });
 
 //
