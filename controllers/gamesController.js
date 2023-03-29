@@ -16,17 +16,14 @@ const postGame = (req, res, next) => {
     } else {
       User.findOne({ username: user }).then((data) => {
         if (data) {
-          console.log(game.songs);
           Games.create({ game: { user, songs } }) // creating the game within the GamesSchema
             .then(() => {
               res.status(201).send({ msg: "Game created" }); // send a sucess message if the creation of the game is sucessfull
             })
             .catch((err) => {
-              console.log(err);
               next(err); // if err, pass to error handling middleware
             });
         } else {
-          console.log(user);
           res.status(404).send({ msg: "User is not found" });
         }
       });

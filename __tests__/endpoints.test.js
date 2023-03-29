@@ -10,8 +10,22 @@ describe("app endpoint tests", () => {
 
   describe("POST /api/user", () => {
     it("should respond with a status 201 created and create a new user", () => {
-      const alphabetStr = "abcdefghijklmnopqrstuvwxyz";
-      const randomStr = alphabetStr.slice(Math.floor(Math.random() * 25));
+      function shuffle(array) {
+        let copy = [],
+          n = array.length,
+          i;
+        while (n) {
+          i = Math.floor(Math.random() * array.length);
+          if (i in array) {
+            copy.push(array[i]);
+            delete array[i];
+            n--;
+          }
+        }
+        return copy;
+      }
+      const randomStr = shuffle(["a", "b", "c", "d", "e", "f", "g", "h", "i"]);
+      console.log(shuffle);
       return request(app)
         .post("/api/user")
         .expect(201)
@@ -118,6 +132,136 @@ describe("app endpoint tests", () => {
               track_ids: ["125155p2", "51o2j5po25j1", "451opj51po2"],
             },
           },
+        });
+    });
+  });
+
+  describe("GET /api/games", () => {
+    it("should return a status code of 200 and the correct body", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "bob", username: "bob", password: "password" })
+        .then(() => {
+          return request(app)
+            .post("/api/games")
+            .expect(201)
+            .send({
+              game: {
+                user: "bob",
+                songs: {
+                  track_ids: ["125155p2", "51o2j5po25j1", "451opj51po2"],
+                },
+              },
+            });
+        })
+        .then(() => {
+          return request(app)
+            .get("/api/games")
+            .expect(200)
+            .send({ username: "bob" })
+            .then((data) => {
+              expect(data.body.length).not.toBe(0);
+              expect(typeof data.body).toBe("object");
+            });
+        });
+    });
+  });
+
+  describe("DELETE /api/user", () => {
+    it("should respond with a status code of 200", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "danny", username: "danny", password: "password" })
+        .then(() => {
+          return request(app)
+            .delete("/api/user")
+            .expect(200)
+            .send({ username: "danny" });
+        });
+    });
+    it("should remove the user from the database", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "danny", username: "danny", password: "password" })
+        .then(() => {
+          return request(app)
+            .delete("/api/user")
+            .expect(200)
+            .send({ username: "danny" });
+        })
+        .then(() => {
+          return request(app)
+            .get("/api/user")
+            .expect(404)
+            .send({ name: "danny", username: "danny", password: "password" });
+        });
+    });
+    it("should return a 404 if the user does not exist when attempting to delete the user", () => {
+      return request(app)
+        .delete("/api/user")
+        .expect(404)
+        .send({ username: "51251235" });
+    });
+  });
+
+  describe("PATCH /api/user", () => {
+    it("should return a status code of 201", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "phil", username: "philly", password: "password" })
+        .then(() => {
+          return request(app)
+            .patch("/api/user")
+            .expect(201)
+            .send({ name: "phil", username: "philly", password: "password" });
+        });
+    });
+    it("should update the users name", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "phil", username: "philly", password: "password" })
+        .then(() => {
+          return request(app)
+            .patch("/api/user")
+            .expect(201)
+            .send({
+              name: "pppeeesss",
+              username: "philly",
+              password: "password",
+            })
+            .then(() => {
+              return request(app)
+                .get("/api/user")
+                .send({
+                  username: "philly",
+                  password: "password",
+                })
+                .expect(200);
+            });
+        });
+    });
+    it("should update the users password", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "phil", username: "philly", password: "password" })
+        .then(() => {
+          return request(app)
+            .patch("/api/user")
+            .expect(201)
+            .send({
+              name: "phil",
+              username: "philly",
+              password: "wordpass",
+            })
+            .then(() => {
+              return request(app)
+                .get("/api/user")
+                .send({
+                  username: "philly",
+                  password: "wordpass",
+                })
+                .expect(200);
+            });
         });
     });
   });
