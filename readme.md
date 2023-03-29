@@ -121,7 +121,3 @@ node app.js
 ## Contributing
 
 If you would like to contribute to the Groove Game API, feel free to submit a pull request. We welcome contributions of all kinds, including bug fixes, new features, and improvements to the documentation.
-
-```
-
-```
