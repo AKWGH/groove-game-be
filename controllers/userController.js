@@ -71,4 +71,34 @@ const deleteUser = (req, res, next) => {
     ];
 };
 
-module.exports = { registerUser, loginUser, deleteUser };
+const updateUser = (req, res, next) => {
+  const { username, password, name } = req.body;
+  const saltRounds = 10;
+  if (!password) {
+    User.updateOne({ username }, { name }).then(() => {
+      res.status(201).send({ msg: "user updated" });
+    });
+  } else if (!name) {
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      // adding random strings to the password
+      bcrypt.hash(password, salt, function (err, hashedPassword) {
+        User.updateOne({ username }, { hashedPassword }).then(() => {
+          res.status(201).send({ msg: "user updated" });
+        });
+      });
+    });
+  } else {
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      // adding random strings to the password
+      bcrypt.hash(password, salt, function (err, hashedPassword) {
+        User.updateOne({ username }, { name, password: hashedPassword }).then(
+          () => {
+            res.status(201).send({ msg: "user updated" });
+          }
+        );
+      });
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, deleteUser, updateUser };

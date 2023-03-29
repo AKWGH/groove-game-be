@@ -203,6 +203,68 @@ describe("app endpoint tests", () => {
         .send({ username: "51251235" });
     });
   });
+
+  describe("PATCH /api/user", () => {
+    it("should return a status code of 201", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "phil", username: "philly", password: "password" })
+        .then(() => {
+          return request(app)
+            .patch("/api/user")
+            .expect(201)
+            .send({ name: "phil", username: "philly", password: "password" });
+        });
+    });
+    it("should update the users name", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "phil", username: "philly", password: "password" })
+        .then(() => {
+          return request(app)
+            .patch("/api/user")
+            .expect(201)
+            .send({
+              name: "pppeeesss",
+              username: "philly",
+              password: "password",
+            })
+            .then(() => {
+              return request(app)
+                .get("/api/user")
+                .send({
+                  username: "philly",
+                  password: "password",
+                })
+                .expect(200);
+            });
+        });
+    });
+    it("should update the users password", () => {
+      return request(app)
+        .post("/api/user")
+        .send({ name: "phil", username: "philly", password: "password" })
+        .then(() => {
+          return request(app)
+            .patch("/api/user")
+            .expect(201)
+            .send({
+              name: "phil",
+              username: "philly",
+              password: "wordpass",
+            })
+            .then(() => {
+              return request(app)
+                .get("/api/user")
+                .send({
+                  username: "philly",
+                  password: "wordpass",
+                })
+                .expect(200);
+            });
+        });
+    });
+  });
 });
 
 //

@@ -35,7 +35,6 @@ const getGame = (req, res, next) => {
   const { username } = req.body; // storing the username from the request body in a variable
   Games.find({ "game.user": username }) // searching Games for games with the associated user
     .then((data) => {
-      console.log("test");
       res.status(200).send(data); // sending games back to the user
     })
     .catch((err) => {
