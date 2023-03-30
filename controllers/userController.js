@@ -7,21 +7,27 @@ const User = require("../models/userModel");
 const registerUser = (req, res, next) => {
   const { name, username, password } = req.body; // capturing the request body
   const saltRounds = 10;
-  bcrypt.genSalt(saltRounds, function (err, salt) {
-    // adding random strings to the password
-    bcrypt.hash(password, salt, function (err, hashedPassword) {
-      // shuffling string characters
-      User.create({ name, username, password: hashedPassword })
-        .then(() => {
-          if (!name || !username || !password) {
-            Promise.reject("Sorry, please fill out all fields");
-          }
-          res.status(201).send({ msg: "user created" });
-        })
-        .catch((err) => {
-          next(err);
+  User.findOne({ username }).then((data) => {
+    if (!data) {
+      bcrypt.genSalt(saltRounds, function (err, salt) {
+        // adding random strings to the password
+        bcrypt.hash(password, salt, function (err, hashedPassword) {
+          // shuffling string characters
+          User.create({ name, username, password: hashedPassword })
+            .then(() => {
+              if (!name || !username || !password) {
+                Promise.reject("Sorry, please fill out all fields");
+              }
+              res.status(201).send({ msg: "user created" });
+            })
+            .catch((err) => {
+              next(err);
+            });
         });
-    });
+      });
+    } else {
+      res.status(401).send({ msg: "user already exists" });
+    }
   });
 };
 
