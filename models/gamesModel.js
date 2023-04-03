@@ -4,9 +4,7 @@ const mongoose = require("mongoose");
 const GamesSchema = new mongoose.Schema({
   game: {
     user: { type: String, required: [true, "Please provide a username"] }, // user references the UserSchema
-    songs: {
-      track_ids: { type: Array, required: [true, "Please provide track ids"] }, // the songs object requires track_id's
-    },
+    songs: { type: Array, required: [true, "Please provide track ids"] }, // the songs object requires track_id's
   },
 });
 
