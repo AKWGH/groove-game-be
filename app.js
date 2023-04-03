@@ -22,6 +22,7 @@ const {
 const { getSongs, getGenres } = require("./controllers/songsController");
 const { postGame, getGame } = require("./controllers/gamesController");
 const { tokenRefresh } = require("./api");
+const { postScore, getScore } = require("./controllers/scoresController");
 
 // allows access to env file
 require("dotenv").config();
@@ -46,6 +47,8 @@ app.post("/api/get-games", getGame);
 app.delete("/api/user", deleteUser);
 app.patch("/api/user", updateUser);
 app.get("/api/genres", getGenres);
+app.post("/api/scores", postScore);
+app.get("/api/scores", getScore);
 // error handling
 
 // handles custom errors

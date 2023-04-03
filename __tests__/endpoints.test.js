@@ -264,6 +264,26 @@ describe("app endpoint tests", () => {
         });
     });
   });
+  describe("POST /api/scores", () => {
+    it("should respond with status code 201 and the posted score", () => {
+      return request(app)
+        .post("/api/scores")
+        .send({ username: "philly", score: 5 })
+        .expect(201)
+        .then(({ body }) => {
+          console.log(body);
+          expect(body.msg).toBe("score posted : 5");
+        });
+    });
+  });
+  describe("GET /api/scores", () => {
+    it("should respond with an array of scores data", () => {
+      return request(app)
+        .get("/api/scores")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.data.length).toBeGreaterThan(0);
+        });
+    });
+  });
 });
-
-//
