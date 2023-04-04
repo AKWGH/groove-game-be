@@ -8,9 +8,11 @@ const postScore = (req, res) => {
 };
 
 const getScore = (req, res) => {
-  Score.find().then((data) => {
-    res.status(200).send({ data });
-  });
+  Score.find()
+    .sort({ score: -1 })
+    .then((data) => {
+      res.status(200).send({ data });
+    });
 };
 
 module.exports = { postScore, getScore };
