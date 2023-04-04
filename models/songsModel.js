@@ -3,7 +3,7 @@ const artistSeeds = require("../db/artistSeeds");
 const axios = require("axios");
 
 const fetchSongs = (genre) => {
-  const songLimit = 20;
+  const songLimit = 50;
   // will fetch songs from the spotify API
   const artistNames = Object.keys(artistSeeds); // creating an array of genres hardcoded in artistSeeds.js
   if (!artistNames.includes(genre)) {

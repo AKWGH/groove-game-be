@@ -8,7 +8,7 @@ const postGame = (req, res, next) => {
       .status(401)
       .send({ msg: "The body of this request is not formatted correctly." });
   } else {
-    const { user, songs } = game;
+    const { user, songs, game_name } = game;
     if (!user || !songs) {
       res
         .status(401)
@@ -16,7 +16,7 @@ const postGame = (req, res, next) => {
     } else {
       User.findOne({ username: user }).then((data) => {
         if (data) {
-          Games.create({ game: { user, songs } }) // creating the game within the GamesSchema
+          Games.create({ game: { user, songs, game_name } }) // creating the game within the GamesSchema
             .then(() => {
               res.status(201).send({ msg: "Game created" }); // send a sucess message if the creation of the game is sucessfull
             })
