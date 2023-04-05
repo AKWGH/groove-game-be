@@ -13,8 +13,10 @@ The Groove Game API currently contains these features:
 - Users can request 20 songs by genre from the Spotify API.
 - Users can update their account.
 - Users can delete their account.
-- Users can post their games to the mongoDB database
-- Users can request data about their previous games
+- Users can post their games to the mongoDB database.
+- Users can request data about their previous games.
+- Users can post scores to the mongoDB database.
+- Users can view all scores stored in the mongoDB database.
 
 ## Prerequisites
 
@@ -24,33 +26,33 @@ The Groove Game API currently contains these features:
 ## Endpoints
 
 ```
-app.post("/api/user", registerUser);
+app.post("/api/user-signup", registerUser);
 ```
 
-This request requires a body: {username: **_string_**, name: **_string_**, password: **_string_** (6 character minimum)}.
+This endpoint will post users to the database. This request requires a body: {username: **_string_**, name: **_string_**, password: **_string_** (6 character minimum)}.
 
 ```
-app.get("/api/user", loginUser);
+app.post("/api/user-login", loginUser);
 
 ```
 
-This request requires a body: {username: **_string_**, password: **_string_**}
+This endpoint will retrieve the user from the database. This request requires a body: {username: **_string_**, password: **_string_**}
 
 ```
 app.get("/api/songs/:genre", getSongs);
 
 ```
 
-This request will allow users to select from a hardcoded list of genres and will request 20 semi-random songs from the Spotify API.
+This request will send users a hardcoded list of 6 genres.
 
 ```
-app.post("/api/games", postGame);
+app.post("/api/submit-games", postGame);
 ```
 
-Posts a game object to the database containing information about games played. This request requires a body: {games: { user: **_string_**, songs: { track*ids: \*\*\_array*\*\*}}}
+Posts a game object to the database containing information about games played. This request requires a body: {games: { user: **_string_**, songs: { **array** }
 
 ```
-app.get("/api/games", getGame);
+app.post("/api/get-games", getGame);
 
 ```
 
@@ -67,6 +69,18 @@ app.patch("/api/user", updateUser);
 ```
 
 This will update the user object stored in the database. This request requires a body: {username: **_string_**, name: **_string_** || password: **_string_** }
+
+```
+app.post("/api/scores", postScore);
+```
+
+This will post a users score to the scores database. This request requires a body: {username: **_string_**}
+
+```
+app.get("/api/scores", getScore);
+```
+
+This will retrieve all of the (sorted) scores stored in the database.
 
 ## Running this on a local machine
 
@@ -85,6 +99,7 @@ To run this server on your local machine, you will need to install our dependenc
     husky: ^8.0.3,
     jest: ^29.5.0,
     supertest: ^6.3.3
+    node: 14.20.1
 
 ```
 
@@ -109,7 +124,6 @@ You will then need to create a mongoDB database and link it to the environment v
 <br>
 <br>
 If you wish to run our tests or develop them further, please include a `MONGO_URI_TEST` variable in the .env file and link it to the appropriate mongoDB database.
-
 <br>
 <br>
 Start the server:
